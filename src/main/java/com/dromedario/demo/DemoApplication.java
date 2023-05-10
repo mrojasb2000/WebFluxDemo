@@ -31,6 +31,10 @@ public class DemoApplication implements CommandLineRunner {
 				@Override
 				public void run() {
 					emitter.next(++count);
+					if (count == 10) {
+						timer.cancel();
+						emitter.complete();
+					}
 				}
 
 			}, 1_000, 1_000);
