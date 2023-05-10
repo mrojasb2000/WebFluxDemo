@@ -1,5 +1,8 @@
 package com.dromedario.demo;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +24,18 @@ public class DemoApplication implements CommandLineRunner {
 
 	private void intervalOperatorFromCreateExample() {
 		Flux.create(emitter -> {
-			System.out.println("Hello from emitter");
-		});
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				private Integer count = 0;
+
+				@Override
+				public void run() {
+					emitter.next(++count);
+				}
+
+			}, 1_000, 1_000);
+		})
+				.doOnNext(value -> System.out.println("Running Timer Task..." + value.toString()))
+				.subscribe();
 	}
 }
