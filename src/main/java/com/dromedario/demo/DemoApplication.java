@@ -31,7 +31,7 @@ public class DemoApplication implements CommandLineRunner {
 				@Override
 				public void run() {
 					emitter.next(++count);
-					if (count == 10) {
+					if (count == 5) {
 						timer.cancel();
 						emitter.complete();
 					}
@@ -40,6 +40,7 @@ public class DemoApplication implements CommandLineRunner {
 			}, 1_000, 1_000);
 		})
 				.doOnNext(value -> System.out.println("Running Timer Task..." + value.toString()))
+				.doOnComplete(() -> System.out.println("Flux completed"))
 				.subscribe();
 	}
 }
