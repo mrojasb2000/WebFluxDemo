@@ -34,16 +34,23 @@ public class DemoApplication implements CommandLineRunner {
 				.log()
 				.subscribe(new Subscriber<Integer>() {
 					private Subscription s;
+					private Integer limit = 2;
+					private Integer count = 0;
 
 					@Override
 					public void onSubscribe(Subscription s) {
 						this.s = s;
-						s.request(Long.MAX_VALUE);
+						s.request(limit);
 					}
 
 					@Override
 					public void onNext(Integer t) {
 						log.info(t.toString());
+						count += 1;
+						if (count == limit) {
+							count = 0;
+							s.request(limit);
+						}
 					}
 
 					@Override
