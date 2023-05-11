@@ -43,8 +43,8 @@ public class DemoApplication implements CommandLineRunner {
 
 			}, 1_000, 1_000);
 		})
-				.doOnNext(value -> log.info("Running Timer Task..." + value.toString()))
-				.doOnComplete(() -> log.info("Flux completed"))
-				.subscribe();
+				.subscribe(next -> log.info(next.toString()),
+						err -> log.error(err.getMessage()),
+						() -> log.info("Flux completed"));
 	}
 }
