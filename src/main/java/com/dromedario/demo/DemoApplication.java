@@ -3,6 +3,8 @@ package com.dromedario.demo;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,14 +14,16 @@ import reactor.core.publisher.Flux;
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
+	private static Logger log = LoggerFactory.getLogger(DemoApplication.class);
+
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
 	public void run(String... args) throws Exception {
-		System.out.println("Before callback");
+		log.info("Before callback");
 		intervalOperatorFromCreateExample();
-		System.out.println("After callback");
+		log.info("After callback");
 	}
 
 	private void intervalOperatorFromCreateExample() {
@@ -39,8 +43,8 @@ public class DemoApplication implements CommandLineRunner {
 
 			}, 1_000, 1_000);
 		})
-				.doOnNext(value -> System.out.println("Running Timer Task..." + value.toString()))
-				.doOnComplete(() -> System.out.println("Flux completed"))
+				.doOnNext(value -> log.info("Running Timer Task..." + value.toString()))
+				.doOnComplete(() -> log.info("Flux completed"))
 				.subscribe();
 	}
 }
