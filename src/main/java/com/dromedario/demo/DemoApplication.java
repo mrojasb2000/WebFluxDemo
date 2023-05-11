@@ -30,7 +30,7 @@ public class DemoApplication implements CommandLineRunner {
 	}
 
 	private void batchProcessOperation() {
-		Flux.range(1, 10)
+		Flux.range(1, 11)
 				.log()
 				.subscribe(new Subscriber<Integer>() {
 					private Subscription s;
