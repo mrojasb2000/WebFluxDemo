@@ -3,6 +3,8 @@ package com.dromedario.demo;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -30,7 +32,31 @@ public class DemoApplication implements CommandLineRunner {
 	private void batchProcessOperation() {
 		Flux.range(1, 10)
 				.log()
-				.subscribe(next -> log.info(next.toString()));
+				.subscribe(new Subscriber<Integer>() {
+					private Subscription s;
+
+					@Override
+					public void onSubscribe(Subscription s) {
+						this.s = s;
+						s.request(Long.MAX_VALUE);
+					}
+
+					@Override
+					public void onNext(Integer t) {
+						log.info(t.toString());
+					}
+
+					@Override
+					public void onError(Throwable t) {
+						log.error(t.getMessage());
+					}
+
+					@Override
+					public void onComplete() {
+						log.info("Completed event");
+					}
+
+				});
 	}
 
 	private void intervalOperatorFromCreateExample() {
