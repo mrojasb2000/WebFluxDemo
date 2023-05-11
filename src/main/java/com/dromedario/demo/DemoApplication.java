@@ -30,40 +30,45 @@ public class DemoApplication implements CommandLineRunner {
 	}
 
 	private void batchProcessOperation() {
-		Flux.range(1, 11)
+		Flux.range(1, 10)
 				.log()
-				.subscribe(new Subscriber<Integer>() {
-					private Subscription s;
-					private Integer limit = 2;
-					private Integer count = 0;
-
-					@Override
-					public void onSubscribe(Subscription s) {
-						this.s = s;
-						s.request(limit);
-					}
-
-					@Override
-					public void onNext(Integer t) {
-						log.info(t.toString());
-						count += 1;
-						if (count == limit) {
-							count = 0;
-							s.request(limit);
-						}
-					}
-
-					@Override
-					public void onError(Throwable t) {
-						log.error(t.getMessage());
-					}
-
-					@Override
-					public void onComplete() {
-						log.info("Completed event");
-					}
-
-				});
+				.limitRate(2)
+				.subscribe(
+				/*
+				 * new Subscriber<Integer>() {
+				 * private Subscription s;
+				 * private Integer limit = 2;
+				 * private Integer count = 0;
+				 * 
+				 * @Override
+				 * public void onSubscribe(Subscription s) {
+				 * this.s = s;
+				 * s.request(limit);
+				 * }
+				 * 
+				 * @Override
+				 * public void onNext(Integer t) {
+				 * log.info(t.toString());
+				 * count += 1;
+				 * if (count == limit) {
+				 * count = 0;
+				 * s.request(limit);
+				 * }
+				 * }
+				 * 
+				 * @Override
+				 * public void onError(Throwable t) {
+				 * log.error(t.getMessage());
+				 * }
+				 * 
+				 * @Override
+				 * public void onComplete() {
+				 * log.info("Completed event");
+				 * }
+				 * 
+				 * }
+				 */
+				);
 	}
 
 	private void intervalOperatorFromCreateExample() {
