@@ -40,6 +40,7 @@ public class DemoApplication implements CommandLineRunner {
 						emitter.complete();
 					}
 					if (count == 3) {
+						timer.cancel();
 						emitter.error(new InterruptedException("Error: count equals 3"));
 					}
 				}
