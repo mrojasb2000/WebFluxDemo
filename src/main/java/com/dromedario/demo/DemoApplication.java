@@ -22,8 +22,15 @@ public class DemoApplication implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 		log.info("Before callback");
-		intervalOperatorFromCreateExample();
+		// intervalOperatorFromCreateExample();
+		batchProcessOperation();
 		log.info("After callback");
+	}
+
+	private void batchProcessOperation() {
+		Flux.range(1, 10)
+				.log()
+				.subscribe(next -> log.info(next.toString()));
 	}
 
 	private void intervalOperatorFromCreateExample() {
