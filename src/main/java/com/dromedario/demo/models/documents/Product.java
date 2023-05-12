@@ -20,5 +20,6 @@ public class Product {
 
     private String name;
     private Double price;
-    private Date createAt;
+    @Builder.Default
+    private Date createAt = new Date();
 }

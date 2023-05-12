@@ -1,10 +1,5 @@
 package com.dromedario.demo;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +35,8 @@ public class DemoApplication implements CommandLineRunner {
 	}
 
 	private void loadDataProductStream() {
-		mongoTemplate.dropCollection("products");
+		productRepository.deleteAll()
+				.subscribe();
 		Flux.just(Product.builder().name("Cort Action PJ Bass Guitar").price(10_000.50).build(),
 				Product.builder().name("Cort Action Bass V plus Bass Guitar").price(10_000.50).build(),
 				Product.builder().name("Epic Electro Acustic Bass Guitar").price(5_000.75).build(),
