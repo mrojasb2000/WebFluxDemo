@@ -42,10 +42,12 @@ public class DemoApplication implements CommandLineRunner {
 	private void loadDataProductStream() {
 		mongoTemplate.dropCollection("products");
 		Flux.just(Product.builder().name("Cort Action PJ Bass Guitar").price(10_000.50).build(),
+				Product.builder().name("Cort Action Bass V plus Bass Guitar").price(10_000.50).build(),
 				Product.builder().name("Epic Electro Acustic Bass Guitar").price(5_000.75).build(),
 				Product.builder().name("ESP LTD 4 Strings Bass Guitar").price(10_000.50).build(),
 				Product.builder().name("ESP LTD 5 Strings Bass Guitar").price(10_000.50).build(),
-				Product.builder().name("Cort Action Bass V plus Bass Guitar").price(10_000.50).build())
+				Product.builder().name("EPIC Electro acustic Guitar").price(8_000.50).build(),
+				Product.builder().name("EPIC Telecaster Guitar").price(12_000.50).build())
 				.flatMap(product -> productRepository.save(
 						product))
 				.subscribe(product -> log.info(product.getId() + " - " + product.getName()));
