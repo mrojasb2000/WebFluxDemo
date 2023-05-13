@@ -1,5 +1,7 @@
 package com.dromedario.demo.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +14,18 @@ import reactor.core.publisher.Flux;
 
 @Controller
 public class ProductController {
+    private static Logger log = LoggerFactory.getLogger(ProductController.class);
     @Autowired
     private ProductRepository productRespository;
 
     @GetMapping({ "/list", "/" })
     public String list(Model model) {
-        Flux<Product> products = productRespository.findAll();
+        Flux<Product> products = productRespository.findAll()
+                .map(product -> {
+                    product.setName(product.getName().toUpperCase());
+                    return product;
+                });
+        products.subscribe(product -> log.info(product.getName()));
         model.addAttribute("products", products);
         model.addAttribute("title", "Product List");
         return "list";
