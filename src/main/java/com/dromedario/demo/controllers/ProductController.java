@@ -11,7 +11,6 @@ import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import com.dromedario.demo.models.dao.ProductRepository;
 import com.dromedario.demo.models.documents.Product;
 
-import ch.qos.logback.core.util.Duration;
 import reactor.core.publisher.Flux;
 
 @Controller
