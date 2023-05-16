@@ -8,6 +8,8 @@ import reactor.core.publisher.Mono;
 public interface ProductService {
     public Flux<Product> findAll();
 
+    public Flux<Product> findAllWithPropertyNameUpperCase();
+
     public Mono<Product> findById(String id);
 
     public Mono<Product> save(Product product);

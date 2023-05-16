@@ -21,9 +21,6 @@ public class DemoApplication implements CommandLineRunner {
 	@Autowired
 	private ProductRepository productRepository;
 
-	@Autowired
-	private ReactiveMongoTemplate mongoTemplate;
-
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}

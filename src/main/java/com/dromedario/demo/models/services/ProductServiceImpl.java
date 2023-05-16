@@ -42,4 +42,13 @@ public class ProductServiceImpl implements ProductService {
         log.info("repository dele by entity...");
         return productRepository.delete(product);
     }
+
+    @Override
+    public Flux<Product> findAllWithPropertyNameUpperCase() {
+        Flux<Product> products = findAll().map(product -> {
+            product.setName(product.getName().toUpperCase());
+            return product;
+        });
+        return products;
+    }
 }
