@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 
 import com.dromedario.demo.models.documents.Product;
@@ -61,6 +62,18 @@ public class ProductController {
     public Mono<String> createForm(Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("title", "product form");
+        return Mono.just("form");
+    }
+
+    @GetMapping("/form/{id}")
+    public Mono<String> updateForm(@PathVariable String id, Model model) {
+        Mono<Product> product = productService.findById(id)
+                .doOnNext(p -> {
+                    log.info("Product id: " + p.getId());
+                });
+
+        model.addAttribute("title", "Product Edit");
+        model.addAttribute("product", product);
         return Mono.just("form");
     }
 
