@@ -15,7 +15,10 @@ import com.dromedario.demo.models.services.ProductService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
+@SessionAttributes("product")
 @Controller
 public class ProductController {
     private static Logger log = LoggerFactory.getLogger(ProductController.class);
@@ -66,7 +69,7 @@ public class ProductController {
     }
 
     @GetMapping("/form/{id}")
-    public Mono<String> updateForm(@PathVariable String id, Model model) {
+    public Mono<String> editForm(@PathVariable String id, Model model) {
         Mono<Product> product = productService.findById(id)
                 .doOnNext(p -> {
                     log.info("Product id: " + p.getId());
@@ -78,7 +81,8 @@ public class ProductController {
     }
 
     @PostMapping(value = "/form")
-    public Mono<String> saveForm(Product product) {
+    public Mono<String> saveForm(Product product, SessionStatus status) {
+        status.setComplete();
         return productService.save(product)
                 .doOnNext(p -> {
                     log.info("Product id: " + p.getId());
