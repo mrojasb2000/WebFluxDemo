@@ -70,14 +70,20 @@ public class ProductController {
 
     @GetMapping("/form/{id}")
     public Mono<String> editForm(@PathVariable String id, Model model) {
-        Mono<Product> product = productService.findById(id)
-                .doOnNext(p -> {
-                    log.info("Product id: " + p.getId());
-                });
-
-        model.addAttribute("title", "Product Edit");
-        model.addAttribute("product", product);
-        return Mono.just("form");
+        return productService.findById(id)
+                .doOnNext(product -> {
+                    log.info("Product id: " + product.getId());
+                    model.addAttribute("title", "Product Edit");
+                    model.addAttribute("product", product);
+                }).defaultIfEmpty(new Product())
+                .flatMap(p -> {
+                    if (p.getId() == null) {
+                        return Mono.error(new InterruptedException("product not exists"));
+                    }
+                    return Mono.just(p);
+                })
+                .then(Mono.just("form"))
+                .onErrorResume(ex -> Mono.just("redirect:/list?error=notFound"));
     }
 
     @PostMapping(value = "/form")
